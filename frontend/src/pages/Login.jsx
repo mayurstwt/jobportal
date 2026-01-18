@@ -1,42 +1,87 @@
-import { useLoginMutation } from "../features/auth/authApi";
-import { useDispatch } from "react-redux";
-import { setCredentials } from "../features/auth/authslice";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { useDispatch } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { useLoginMutation } from "../features/auth/authApi";
+import { setCredentials } from "../features/auth/authslice";
 
 export default function Login() {
-  const [login] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  
-  const handleLogin = async () => {
-    try {
-      setError(null);
-      const res = await login({
-      email: "admin@admin.com",
-      password: "admin123",
-    }).unwrap();
+  const [login, { isLoading }] = useLoginMutation();
 
-    dispatch(setCredentials(res));
-    navigate("/");
-    } catch (error) {
-      setError(error.message);
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [error, setError] = useState(null);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    try {
+      const res = await login(form).unwrap();
+      dispatch(setCredentials(res));
+
+      // ✅ Role-based redirect
+      if (res.user.role === "admin") navigate("/admin");
+      else if (res.user.role === "recruiter") navigate("/recruiter");
+      else navigate("/");
+    } catch (err) {
+      setError(err?.data?.message || "Login failed");
     }
   };
+
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded shadow w-80">
-        <h1 className="text-xl font-semibold mb-4">Login</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded shadow w-96"
+      >
+        <h1 className="text-2xl font-semibold mb-4 text-center">Login</h1>
+
+        {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          required
+          value={form.email}
+          onChange={handleChange}
+          className="w-full border p-2 mb-3 rounded"
+        />
+
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+          value={form.password}
+          onChange={handleChange}
+          className="w-full border p-2 mb-4 rounded"
+        />
 
         <button
-          onClick={handleLogin}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
         >
-          Login
+          {isLoading ? "Logging in..." : "Login"}
         </button>
-      </div>
+
+        <p className="text-sm text-center mt-4">
+          Don’t have an account?{" "}
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Register
+          </Link>
+        </p>
+      </form>
     </div>
   );
 }

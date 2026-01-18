@@ -6,6 +6,7 @@ import Jobs from "./pages/Jobs";
 import RecruiterDashboard from "./pages/RecruiterDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Register from "./pages/Register";
+import CreateJob from "./pages/CreateJob";
 
 export default function App() {
   return (
@@ -28,6 +29,14 @@ export default function App() {
           element={
             <ProtectedRoute roles={["admin"]}>
               <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/recruiter/create-job"
+          element={
+            <ProtectedRoute roles={["recruiter"]}>
+              <CreateJob />
             </ProtectedRoute>
           }
         />

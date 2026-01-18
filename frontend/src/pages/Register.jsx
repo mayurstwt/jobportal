@@ -61,8 +61,8 @@ export default function Register() {
         />
 
         <input
-          name="email"
           type="email"
+          name="email"
           placeholder="Email"
           required
           value={form.email}
@@ -71,8 +71,8 @@ export default function Register() {
         />
 
         <input
-          name="password"
           type="password"
+          name="password"
           placeholder="Password"
           required
           value={form.password}
@@ -92,6 +92,7 @@ export default function Register() {
         </select>
 
         <button
+          type="submit"
           disabled={isLoading}
           className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 disabled:opacity-50"
         >
