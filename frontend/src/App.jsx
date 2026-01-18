@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Jobs from "./pages/Jobs";
 import RecruiterDashboard from "./pages/RecruiterDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import Register from "./pages/Register";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/" element={<Jobs />} />
         <Route
           path="/recruiter"

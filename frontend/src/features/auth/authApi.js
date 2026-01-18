@@ -7,14 +7,20 @@ export const authApi = api.injectEndpoints({
             query: (data) => ({
                 url: "/auth/login",
                 method: "POST",
-                body: data
+                body: data,
+                headers: {
+                    "Content-Type": "application/json",
+                },
             })
         }),
         register: builder.mutation({
             query: (data) => ({
                 url: "/auth/register",
                 method: "POST",
-                body: data
+                body: data,
+                headers: {
+                    "Content-Type": "application/json",
+                },
             })
         })
     })

@@ -15,8 +15,8 @@ export default function Login() {
     try {
       setError(null);
       const res = await login({
-      email: "recruiter@recruiter.com",
-      password: "recruiter",
+      email: "admin@admin.com",
+      password: "admin123",
     }).unwrap();
 
     dispatch(setCredentials(res));
